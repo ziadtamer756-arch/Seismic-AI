@@ -44,7 +44,93 @@ Architecture:
 
 \- Multi Layer Perceptron Neural Network (MLP)
 
+\# 🌍 Seismic AI Research Platform
 
+
+
+An AI-powered earthquake monitoring and risk analysis platform using Neural Networks.
+
+
+
+\## 🚀 Live Demo
+
+
+
+https://seismic-ai-platform.streamlit.app
+
+
+
+\## Features
+
+
+
+\- 🌍 Real earthquake data monitoring
+
+\- 🧠 Neural Network risk classification
+
+\- 📈 Magnitude prediction
+
+\- 🗺️ Interactive earthquake map
+
+\- 🤖 Gemini AI seismic reports
+
+\- 📊 Model performance evaluation
+
+
+
+\## AI Model Training
+
+
+
+The models were trained using real seismic earthquake datasets.
+
+
+
+Training information:
+
+
+
+\- Dataset size: 80 GB
+
+\- Geological parameters
+
+\- Magnitude data
+
+\- Depth information
+
+\- Location features
+
+\- Time-based features
+
+
+
+Models:
+
+
+
+\- Neural Network Risk Classifier
+
+\- Neural Network Magnitude Predictor
+
+
+
+\## Model Performance
+
+
+
+Accuracy: 95.24%
+
+
+
+Precision: 95.92%
+
+
+
+Recall: 95.24%
+
+
+
+F1 Score: 95.53%
 
 Features:
 

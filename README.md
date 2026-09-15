@@ -26,7 +26,11 @@ An AI-powered earthquake monitoring and analysis system using Machine Learning a
 
 
 
+\## 📸 Dashboard Preview
 
+
+
+!\[Seismic AI Dashboard](screenshots/dashboard.png)
 
 \## 🧠 Artificial Intelligence Models
 

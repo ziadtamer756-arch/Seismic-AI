@@ -8,4 +8,8 @@ venv/
 
 earthquakes.db
 
+prepared_earthquake_data.csv
+
 *.pkl
+
+reports/*.txt

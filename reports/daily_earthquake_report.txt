@@ -1,0 +1,85 @@
+# Seismic Activity Analysis & Research Report
+
+---
+
+### Executive Summary
+This report analyzes a dataset of **47 recent earthquake events** recorded globally. The dataset captures a diverse range of tectonic activity, including oceanic spreading center ruptures, intraplate crustal faulting, active subduction zone micro-seismicity, and deep mantle slab earthquakes.
+
+---
+
+### 1. Event Count & Overview
+* **Total Events Analyzed:** 47
+* **Magnitude Range:** $M_w\ 2.5$ to $M_w\ 6.0$
+* **Depth Range:** $-1.93\text{ km}$ (above sea level/near-surface) to $535.42\text{ km}$ (deep mantle focus)
+
+---
+
+### 2. Highest Magnitude Event
+* **Magnitude:** **$M_w\ 6.0$**
+* **Location:** 145 km N of Caluula, Somalia (Gulf of Aden / Guardafui Channel region)
+* **Coordinates:** $13.2654^\circ\text{N},\ 50.5425^\circ\text{E}$
+* **Depth:** $10.0\text{ km}$ (Shallow)
+* **Tectonic Context:** Represents shallow transform or divergent faulting along the Sheba Ridge / Gulf of Aden spreading center system where the Arabian Plate is separating from the Somali Plate.
+
+---
+
+### 3. Geographic Distribution
+
+The events are categorized into primary geographic and tectonic domains:
+
+#### A. Pacific Ring of Fire (Subduction Zones)
+* **Aleutian Arc / Alaska:** Significant concentration of events (12 total), primarily micro-to-minor seismicity ($M_w\ 2.5 - 3.2$) clustered heavily near **Adak, Alaska**.
+* **Western Pacific & East Asia:** Events recorded in **Japan** ($M 4.4, M 4.6, M 4.5$), **Taiwan** ($M 4.4$), **Philippines** ($M 4.4$), **Indonesia / Timor Leste** ($M 4.1 - 4.6$), **Papua New Guinea** ($M 4.4 - 5.0$), **Vanuatu** ($M 5.0$), and **Russia (Kamchatka)** ($M 5.0$).
+* **South Pacific (Tonga / Fiji):** High-depth events along the Tonga-Kermadec trench system ($M 4.4, M 4.9$).
+* **South America:** **Chile** ($M 4.6$, Nazca subduction).
+
+#### B. Oceanic Ridges & Spreading Centers
+* **Somalia / Gulf of Aden:** $M_w\ 6.0$ (Sheba Ridge spreading center)
+* **Southeast Indian Ridge:** $M_w\ 5.2$
+* **Southwest Indian Ridge:** $M_w\ 4.9$
+* **Northern East Pacific Rise:** $M_w\ 5.0$
+
+#### C. Intraplate & Transform Environments
+* **Continental Americas:** Minor shallow events across **California** (Yosemite, Redwood Valley), **New Mexico**, **Montana**, **Wyoming**, and **China** ($M_w\ 5.0$ shallow crustal near Fuji, Sichuan).
+* **Caribbean Plate Boundaries:** Minor-to-light activity off **Puerto Rico**, **U.S. Virgin Islands**, **Panama**, and **Venezuela**.
+
+---
+
+### 4. Depth Profile Analysis
+
+Earthquake depths in this dataset span three distinct operational regimes:
+
+```
+[ Shallow (<70 km) ]  ═══════════════════════════════════►  39 events (83.0%)
+[ Intermediate (70–300 km) ]  ══════════════════════════►   6 events (12.8%)
+[ Deep (>300 km) ]  ════════════════════════════════════►   2 events  (4.2%)
+```
+
+1. **Shallow Focus ($0 - 70\text{ km}$):** 39 events.
+   * Includes all mid-ocean ridge events ($10.0\text{ km}$ default crustal depth).
+   * **Depth Anomaly:** $3\text{ km}$ NW of Little America, Wyoming recorded a negative depth ($-1.93\text{ km}$), typical for hypocenters elevated relative to mean sea level or near-surface quarry/mining/geothermal activities.
+2. **Intermediate Focus ($70 - 300\text{ km}$):** 6 events.
+   * Philippines ($118.4\text{ km}$), Chile ($131.4\text{ km}$), Ryukyu Arc/Japan ($131.7\text{ km}$), Indonesia ($130.0\text{ km}$), PNG ($267.5\text{ km}$), and Aleutians ($115.8\text{ km}$).
+   * Represents intra-slab deformation within subducted oceanic lithosphere.
+3. **Deep Focus ($> 300\text{ km}$):** 2 events.
+   * **Fiji Region:** $535.42\text{ km}$ ($M 4.4$)
+   * **Tonga Region:** $520.31\text{ km}$ ($M 4.9$)
+   * Associated with deep mantle transition zone shear strain within the subducting Australian plate slab.
+
+---
+
+### 5. Hazard & Risk Interpretation
+
+* **Oceanic Offshore Events (Low Population Risk):** The primary moderate-to-strong events ($M 6.0$ Somalia, $M 5.2$ SE Indian Ridge, $M 5.0$ East Pacific Rise, $M 5.0$ Kamchatka) occurred offshore at shallow depths. Tsunami generation risk for these events is negligible to extremely low due to magnitude constraints ($M < 7.0$).
+* **Continental Shallow Events (Localized Shaking Risk):**
+  * **Fuji, China ($M 5.0$, Depth $10\text{ km}$):** Poses localized moderate ground shaking risk to populated structures depending on local site amplification.
+  * **La Victoria, Venezuela ($M 4.4$, Depth $10\text{ km}$):** Shallow focal depth near populated areas increases felt intensity (MMI IV–V) despite moderate magnitude.
+* **Aleutian Micro-Seismicity:** Swarm behavior around Adak, AK exhibits low immediate hazard to infrastructure but warrants monitoring for potential precursor signals to larger regional subduction events.
+
+---
+
+### 6. Key Research Observations
+
+1. **Tectonic Ridge Activity:** The occurrence of $M 4.9 - 6.0$ events along the Indian Ocean ridges, East Pacific Rise, and Gulf of Aden indicates active plate spreading dynamics and transform fault shear episodes along oceanic boundary systems.
+2. **Wadati-Benioff Zone Visualization:** Clear depth-gradient imaging is present in the South Pacific and East Asian arcs: transitioning from shallow trench-proximal events ($10 - 35\text{ km}$) to deep mantle earthquakes ($>500\text{ km}$) along the Tonga-Fiji subduction complex.
+3. **Adak Swarm/Cluster Sequence:** 8 out of 47 events concentrated within a tight geographic radius ($170 - 240\text{ km}$ around Adak/Aleutians), indicating localized stress release along the Pacific-North American plate subduction interface.

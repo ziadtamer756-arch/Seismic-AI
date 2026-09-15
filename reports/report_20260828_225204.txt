@@ -1,0 +1,13 @@
+
+
+AI connection failed.
+
+Local seismic analysis:
+
+{'station': 'TEST', 'network': 'LOCAL', 'sampling_rate': 100, 'duration': 50, 'max_amplitude': 3.4991895261508765, 'min_amplitude': -4.195769423989135}
+
+
+Error:
+
+Error calling model 'gemini-2.5-flash' (NOT_FOUND): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}
+

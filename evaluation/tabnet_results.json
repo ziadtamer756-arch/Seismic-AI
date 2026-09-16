@@ -1,0 +1,19 @@
+{
+    "model": "TabNet",
+    "framework": "PyTorch TabNet",
+    "task": "Multiclass Classification",
+    "accuracy": 0.9044062733383121,
+    "f1_score_weighted": 0.8936085854005326,
+    "architecture": {
+        "n_d": 32,
+        "n_a": 32,
+        "n_steps": 5,
+        "optimizer": "Adam",
+        "learning_rate": 0.02,
+        "attention": "Sparse Feature Attention"
+    },
+    "regularization": [
+        "Sparse Attention",
+        "Early Stopping"
+    ]
+}

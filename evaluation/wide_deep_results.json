@@ -1,0 +1,14 @@
+{
+    "model": "Wide & Deep Neural Network",
+    "framework": "TensorFlow/Keras",
+    "task": "Multiclass Classification",
+    "accuracy": 0.9041573313417973,
+    "f1_score_weighted": 0.8979880027217654,
+    "architecture": [
+        "Wide Branch",
+        "Deep Dense Layers",
+        "BatchNormalization",
+        "Dropout",
+        "Softmax Output"
+    ]
+}

@@ -9,6 +9,10 @@ import folium
 from streamlit_folium import st_folium
 
 
+import sys
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
+
 from ai_prediction import predict_latest_earthquake
 from ai_report import generate_ai_report
 
@@ -49,7 +53,7 @@ st.set_page_config(
 # ==========================
 
 with open(
-    "config/config.yaml",
+    os.path.join(BASE_DIR, "config/config.yaml"),
     "r"
 ) as file:
 
@@ -477,14 +481,14 @@ st.subheader(
 
 if os.path.exists(
 
-    "evaluation/model_metrics.json"
+    os.path.join(BASE_DIR, "evaluation/model_metrics.json")
 
 ):
 
 
     with open(
 
-        "evaluation/model_metrics.json",
+        os.path.join(BASE_DIR, "evaluation/model_metrics.json"),
 
         "r"
 
@@ -556,11 +560,11 @@ st.subheader(
 
 
 if os.path.exists(
-    "evaluation/confidence_interval.json"
+    os.path.join(BASE_DIR, "evaluation/confidence_interval.json")
 ):
 
     with open(
-        "evaluation/confidence_interval.json",
+        os.path.join(BASE_DIR, "evaluation/confidence_interval.json"),
         "r"
     ) as f:
 
@@ -613,14 +617,14 @@ st.subheader(
 
 if os.path.exists(
 
-    "evaluation/ablation_results.json"
+    os.path.join(BASE_DIR, "evaluation/ablation_results.json")
 
 ):
 
 
     with open(
 
-        "evaluation/ablation_results.json"
+        os.path.join(BASE_DIR, "evaluation/ablation_results.json")
 
     ) as f:
 
@@ -660,9 +664,9 @@ st.subheader(
     "⚙️ Hyperparameter Optimization"
 )
 
-if os.path.exists("evaluation/hyperparameter_results.json"):
+if os.path.exists(os.path.join(BASE_DIR, "evaluation/hyperparameter_results.json")):
 
-    with open("evaluation/hyperparameter_results.json", "r") as f:
+    with open(os.path.join(BASE_DIR, "evaluation/hyperparameter_results.json"), "r") as f:
         hp = json.load(f)
 
     c1, c2, c3 = st.columns(3)
@@ -750,14 +754,14 @@ st.subheader(
 
 if os.path.exists(
 
-    "evaluation/confusion_matrix.png"
+    os.path.join(BASE_DIR, "evaluation/confusion_matrix.png")
 
 ):
 
 
     st.image(
 
-        "evaluation/confusion_matrix.png",
+        os.path.join(BASE_DIR, "evaluation/confusion_matrix.png"),
 
         caption="Risk Model Confusion Matrix"
 
@@ -971,7 +975,7 @@ st.header(
 
 # Baseline
 
-if os.path.exists("evaluation/model_comparison.json"):
+if os.path.exists(os.path.join(BASE_DIR, "evaluation/model_comparison.json")):
 
     st.subheader(
         "🏆 Baseline Comparison"
@@ -979,7 +983,7 @@ if os.path.exists("evaluation/model_comparison.json"):
 
 
     with open(
-        "evaluation/model_comparison.json"
+        os.path.join(BASE_DIR, "evaluation/model_comparison.json")
     ) as f:
 
         baseline = json.load(f)
@@ -997,7 +1001,7 @@ if os.path.exists("evaluation/model_comparison.json"):
 
 # Ablation
 
-if os.path.exists("evaluation/ablation_results.json"):
+if os.path.exists(os.path.join(BASE_DIR, "evaluation/ablation_results.json")):
 
     st.subheader(
         "🧪 Ablation Study"
@@ -1005,7 +1009,7 @@ if os.path.exists("evaluation/ablation_results.json"):
 
 
     with open(
-        "evaluation/ablation_results.json"
+        os.path.join(BASE_DIR, "evaluation/ablation_results.json")
     ) as f:
 
         ablation = json.load(f)
@@ -1024,7 +1028,7 @@ if os.path.exists("evaluation/ablation_results.json"):
 # SHAP
 
 if os.path.exists(
-    "evaluation/shap_importance_report.json"
+    os.path.join(BASE_DIR, "evaluation/shap_importance_report.json")
 ):
 
     st.subheader(
@@ -1033,7 +1037,7 @@ if os.path.exists(
 
 
     with open(
-        "evaluation/shap_importance_report.json"
+        os.path.join(BASE_DIR, "evaluation/shap_importance_report.json")
     ) as f:
 
         shap_data = json.load(f)
@@ -1057,8 +1061,8 @@ if os.path.exists(
 
 st.subheader("📈 Confidence Interval Validation")
 
-if os.path.exists("evaluation/confidence_interval.json"):
-    with open("evaluation/confidence_interval.json", "r") as f:
+if os.path.exists(os.path.join(BASE_DIR, "evaluation/confidence_interval.json")):
+    with open(os.path.join(BASE_DIR, "evaluation/confidence_interval.json"), "r") as f:
         ci = json.load(f)
 
     c1, c2, c3 = st.columns(3)
@@ -1075,8 +1079,8 @@ if os.path.exists("evaluation/confidence_interval.json"):
 
 st.subheader("🧠 MLP Regularization Study")
 
-if os.path.exists("evaluation/mlp_tuning_results.json"):
-    with open("evaluation/mlp_tuning_results.json", "r") as f:
+if os.path.exists(os.path.join(BASE_DIR, "evaluation/mlp_tuning_results.json")):
+    with open(os.path.join(BASE_DIR, "evaluation/mlp_tuning_results.json"), "r") as f:
         mlp = json.load(f)
 
     st.json(mlp)

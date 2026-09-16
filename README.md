@@ -166,7 +166,32 @@ The project evaluates multiple approaches:
 
 \---
 
+## Deep Learning Models
 
+The project was extended with multiple Deep Learning architectures:
+
+### 1. Deep Neural Network (DNN)
+- Framework: TensorFlow/Keras
+- Dense neural architecture
+- Batch Normalization
+- Dropout regularization
+- Early stopping
+
+### 2. TabNet
+- Framework: PyTorch TabNet
+- Attention-based tabular deep learning model
+- Accuracy: 90.44%
+- Weighted F1-score: 89.36%
+
+### 3. Wide & Deep Neural Network
+- Framework: TensorFlow/Keras
+- Combines wide feature interactions with deep representation learning
+- Accuracy: 90.42%
+- Weighted F1-score: 89.80%
+
+## Deep Learning Benchmark
+
+The platform includes automated comparison between Deep Learning models with saved evaluation results and dashboard visualization.
 
 \# 🧪 Evaluation Framework
 

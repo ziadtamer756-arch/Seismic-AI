@@ -3,72 +3,86 @@ import pandas as pd
 import sqlite3
 import json
 import os
+import yaml
+
+import folium
+from streamlit_folium import st_folium
 
 
 from ai_prediction import predict_latest_earthquake
 from ai_report import generate_ai_report
 
+from earthquake_data import get_recent_earthquakes
+from database import save_earthquakes
 
+tabs = st.tabs(
+[
+"🌎 Overview",
+"🧠 AI Prediction",
+"🏆 Baselines",
+"🔁 Validation",
+"🧪 Ablation",
+"🔍 Explainability",
+"🌍 Map",
+"🤖 AI Report"
+]
+)
 
 # ==========================
 # PAGE CONFIG
 # ==========================
 
 st.set_page_config(
+
     page_title="Seismic AI Platform",
+
     page_icon="🌎",
+
     layout="wide"
+
 )
 
 
 
 # ==========================
-# LANGUAGE BUTTON
+# CONFIG
 # ==========================
 
-col1, col2 = st.columns([8,1])
+with open(
+    "config/config.yaml",
+    "r"
+) as file:
+
+    config = yaml.safe_load(file)
+
+
+
+DATABASE_PATH = config["paths"]["database"]
+
+
+
+# ==========================
+# LANGUAGE
+# ==========================
+
+col1, col2 = st.columns([9,1])
+
 
 with col2:
 
     language = st.selectbox(
+
         "🌐",
+
         [
             "English",
             "العربية"
         ]
+
     )
 
 
-# ==========================
-# LIVE DATA UPDATE
-# ==========================
 
-from earthquake_data import get_recent_earthquakes
-from database import save_earthquakes
-
-
-if st.button("🔄 Update Latest Earthquakes"):
-
-    with st.spinner("Downloading latest seismic events..."):
-
-        try:
-
-            events = get_recent_earthquakes()
-
-            save_earthquakes(events)
-
-            st.success(
-                f"✅ Updated successfully: {len(events)} new earthquakes"
-            )
-
-            st.rerun()
-
-
-        except Exception as e:
-
-            st.error(
-                f"Update failed: {e}"
-            )
 # ==========================
 # TITLE
 # ==========================
@@ -76,74 +90,148 @@ if st.button("🔄 Update Latest Earthquakes"):
 
 if language == "العربية":
 
-    title = "🌎 منصة الذكاء الاصطناعي لمراقبة الزلازل"
+    st.title(
+        "🌎 منصة الذكاء الاصطناعي لمراقبة الزلازل"
+    )
+
 
 else:
 
-    title = "🌎 Seismic AI Research Platform"
-
-
-
-st.title(title)
+    st.title(
+        "🌎 Seismic AI Research Platform"
+    )
 
 
 
 st.caption(
-    "Advanced earthquake monitoring using Neural Networks and Artificial Intelligence"
+
+"AI-powered earthquake monitoring, prediction and explainability system"
+
 )
 
 
 
 # ==========================
-# TRAINING INFO
+# UPDATE DATA
+# ==========================
+
+
+if st.button(
+    "🔄 Update Latest Earthquakes"
+):
+
+    with st.spinner(
+        "Updating seismic data..."
+    ):
+
+
+        try:
+
+
+            events = get_recent_earthquakes()
+
+
+            save_earthquakes(events)
+
+
+            st.success(
+
+                f"Updated {len(events)} events"
+
+            )
+
+
+            st.rerun()
+
+
+
+        except Exception as e:
+
+
+            st.error(e)
+
+
+
+
+# ==========================
+# LOAD DATABASE
+# ==========================
+
+
+@st.cache_data
+def load_database():
+
+
+    conn = sqlite3.connect(
+
+        DATABASE_PATH
+
+    )
+
+
+    df = pd.read_sql(
+
+        "SELECT * FROM earthquakes",
+
+        conn
+
+    )
+
+
+    conn.close()
+
+
+    return df
+
+
+
+
+df = load_database()
+
+
+
+# ==========================
+# MODEL INFORMATION
 # ==========================
 
 
 st.info(
+
 """
-🧠 Neural Network Training Information
+🧠 Seismic AI Research Model
 
-The seismic AI models were trained using real earthquake datasets.
 
-Training Data:
-• Real seismic events database
-• Dataset size: 80 GB
+Training:
+
+• Real earthquake event database
 • Geological parameters
-• Magnitude
-• Depth
-• Location
-• Time-based features
+• Geographic coordinates
+• Temporal patterns
 
 
-AI Models:
+Models:
 
-• Neural Network Risk Classifier
-• Neural Network Magnitude Predictor
+• Random Forest Classifier
+• XGBoost Classifier
+• MLP Neural Network
+• Magnitude Regression Model
 
-The system uses machine learning algorithms
-for seismic analysis and risk assessment.
+
+Validation:
+
+• Train/Test evaluation
+• 5 Fold Cross Validation
+• SMOTE balancing
+
+
+Explainability:
+
+• SHAP Feature Importance
+
 """
+
 )
 
-
-
-# ==========================
-# DATABASE
-# ==========================
-
-
-conn = sqlite3.connect(
-    "earthquakes.db"
-)
-
-
-df = pd.read_sql(
-    "SELECT * FROM earthquakes",
-    conn
-)
-
-
-conn.close()
 
 
 
@@ -152,104 +240,225 @@ conn.close()
 # ==========================
 
 
+st.subheader(
+
+"📊 Earthquake Statistics"
+
+)
+
+
+
 c1,c2,c3,c4 = st.columns(4)
 
 
+
 with c1:
+
     st.metric(
+
         "🌋 Events",
+
         len(df)
+
     )
 
 
 with c2:
+
     st.metric(
-        "📈 Avg Magnitude",
+
+        "📈 Average Magnitude",
+
         round(
+
             df.magnitude.mean(),
+
             2
+
         )
+
     )
+
 
 
 with c3:
+
     st.metric(
-        "⚡ Maximum",
+
+        "⚡ Maximum Magnitude",
+
         df.magnitude.max()
+
     )
 
 
+
 with c4:
+
     st.metric(
-        "🌊 Avg Depth",
+
+        "🌊 Average Depth",
+
         round(
+
             df.depth.mean(),
+
             2
+
         )
+
     )
 
 
 
 st.divider()
-
-
-
 # ==========================
 # AI PREDICTION
 # ==========================
 
 
-st.header(
-    "🧠 Neural Network AI Analysis"
+st.subheader(
+
+    "🧠 AI Seismic Intelligence"
+
 )
 
 
 try:
 
+
     prediction = predict_latest_earthquake()
 
 
-    a,b = st.columns(2)
+
+    c1, c2, c3 = st.columns(3)
 
 
-    with a:
+
+    # Risk
+
+    with c1:
+
 
         if prediction["risk"] == "High":
 
+
             st.error(
+
                 "🔴 HIGH RISK"
+
             )
+
 
         elif prediction["risk"] == "Medium":
 
+
             st.warning(
+
                 "🟡 MEDIUM RISK"
+
             )
+
 
         else:
 
+
             st.success(
+
                 "🟢 LOW RISK"
+
             )
 
 
-    with b:
+
+        if prediction.get("confidence"):
+
+
+            st.metric(
+
+                "🤖 AI Confidence",
+
+                f"{prediction['confidence']}%"
+
+            )
+
+
+
+
+    # Magnitude
+
+    with c2:
+
 
         st.metric(
-            "Predicted Magnitude",
+
+            "🌋 Predicted Magnitude",
+
             prediction["magnitude"]
+
         )
 
 
-except Exception as e:
 
-    st.warning(
-        str(e)
+
+    # Depth
+
+    with c3:
+
+
+        st.metric(
+
+            "🌊 Depth",
+
+            f"{prediction['depth']} km"
+
+        )
+
+
+
+
+
+    st.info(
+
+f"""
+
+📍 Location:
+
+{prediction['location']}
+
+
+AI Analysis:
+
+• Geographic position
+
+• Depth information
+
+• Historical seismic features
+
+• Temporal patterns
+
+
+"""
+
     )
 
 
 
+except Exception as e:
+
+
+    st.error(
+
+        f"Prediction Error: {e}"
+
+    )
+
+
+
+
 st.divider()
+
+
 
 
 
@@ -258,142 +467,403 @@ st.divider()
 # ==========================
 
 
-st.header(
+st.subheader(
+
     "📊 Model Performance"
+
 )
 
 
+
 if os.path.exists(
-    "model_metrics.json"
+
+    "evaluation/model_metrics.json"
+
 ):
 
+
     with open(
-        "model_metrics.json"
-    ) as f:
 
-        metrics=json.load(f)
+        "evaluation/model_metrics.json",
+
+        "r"
+
+    ) as file:
 
 
-    m1,m2,m3,m4 = st.columns(4)
+        metrics = json.load(file)
 
 
-    with m1:
+
+
+    a,b,c,d = st.columns(4)
+
+
+
+    with a:
 
         st.metric(
+
             "Accuracy",
+
             f"{metrics['classification']['accuracy']*100:.2f}%"
+
         )
 
 
-    with m2:
+    with b:
 
         st.metric(
+
             "Precision",
+
             f"{metrics['classification']['precision']*100:.2f}%"
+
         )
 
 
-    with m3:
+    with c:
 
         st.metric(
+
             "Recall",
+
             f"{metrics['classification']['recall']*100:.2f}%"
+
         )
 
 
-    with m4:
+    with d:
 
         st.metric(
+
             "F1 Score",
+
             f"{metrics['classification']['f1_score']*100:.2f}%"
+
         )
 
 
 
 st.divider()
+# ==========================
+# STATISTICAL VALIDATION
+# ==========================
+
+st.subheader(
+    "🔁 Statistical Validation"
+)
 
 
+if os.path.exists(
+    "evaluation/confidence_interval.json"
+):
+
+    with open(
+        "evaluation/confidence_interval.json",
+        "r"
+    ) as f:
+
+        validation = json.load(f)
+
+
+    a,b,c = st.columns(3)
+
+
+    with a:
+
+        st.metric(
+            "Accuracy",
+            f"{validation['accuracy']*100:.2f}%"
+        )
+
+
+    with b:
+
+        st.metric(
+            "Confidence Level",
+            validation["confidence_level"]
+        )
+
+
+    with c:
+
+        st.metric(
+            "95% Confidence Interval",
+            f"{validation['lower_bound']*100:.2f}% - {validation['upper_bound']*100:.2f}%"
+        )
+
+
+else:
+
+    st.info(
+        "Confidence interval results not available"
+    )
+
+# ==========================
+# ABLATION STUDY
+# ==========================
+
+
+st.subheader(
+    "🧪 Feature Ablation Study"
+)
+
+
+
+if os.path.exists(
+
+    "evaluation/ablation_results.json"
+
+):
+
+
+    with open(
+
+        "evaluation/ablation_results.json"
+
+    ) as f:
+
+
+        ablation=json.load(f)
+
+
+
+    ablation_df = pd.DataFrame(
+
+        ablation
+
+    ).T
+
+
+
+    st.dataframe(
+
+        ablation_df,
+
+        use_container_width=True
+
+    )
+
+
+    st.bar_chart(
+
+        ablation_df["accuracy"]
+
+    )
+
+# ==========================
+# HYPERPARAMETER OPTIMIZATION
+# ==========================
+
+st.subheader(
+    "⚙️ Hyperparameter Optimization"
+)
+
+if os.path.exists("evaluation/hyperparameter_results.json"):
+
+    with open("evaluation/hyperparameter_results.json", "r") as f:
+        hp = json.load(f)
+
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        st.metric(
+            "CV Accuracy",
+            f"{hp.get('cv_accuracy', 0) * 100:.2f}%"
+        )
+
+    with c2:
+        st.metric(
+            "Test Accuracy",
+            f"{hp.get('test_accuracy', 0) * 100:.2f}%"
+        )
+
+    with c3:
+        st.metric(
+            "Test F1",
+            f"{hp.get('test_f1', 0) * 100:.2f}%"
+        )
+
+    st.write("Best Parameters")
+    st.json(hp.get("best_parameters", {}))
+
+else:
+    st.info("Hyperparameter results not available")
+
+
+# ==========================
+# AI SUMMARY
+# ==========================
+
+
+st.subheader(
+    "🤖 AI Summary"
+)
+
+
+
+summary = f"""
+
+The AI model classified this earthquake event as:
+
+**{prediction['risk']} Risk**
+
+
+Predicted magnitude:
+
+**{prediction['magnitude']}**
+
+
+Confidence level:
+
+**{prediction['confidence']}%**
+
+
+The decision was generated using:
+
+- Geographic information
+- Depth characteristics
+- Temporal patterns
+- Historical seismic features
+
+
+"""
+
+
+st.success(
+    summary
+)
 
 # ==========================
 # CONFUSION MATRIX
 # ==========================
 
 
-st.header(
+st.subheader(
+
     "🧩 Confusion Matrix"
+
 )
+
 
 
 if os.path.exists(
-    "confusion_matrix.png"
+
+    "evaluation/confusion_matrix.png"
+
 ):
 
+
     st.image(
-        "confusion_matrix.png",
+
+        "evaluation/confusion_matrix.png",
+
         caption="Risk Model Confusion Matrix"
+
     )
+
 
 else:
 
+
     st.warning(
-        "Confusion Matrix not generated yet"
+
+        "Confusion matrix not found"
+
     )
 
 
 
+
 st.divider()
-
-
-
 # ==========================
-# GEMINI REPORT
+# GEMINI AI REPORT
 # ==========================
 
 
-st.header(
+st.subheader(
+
     "🤖 Gemini Seismic AI Report"
+
 )
+
 
 
 if st.button(
+
     "Generate AI Report"
+
 ):
 
-    report = generate_ai_report()
 
-    st.text_area(
-        "Report",
-        report,
-        height=400
-    )
+    with st.spinner(
+
+        "Generating report..."
+
+    ):
+
+
+        try:
+
+
+            report = generate_ai_report()
+
+
+            st.text_area(
+
+                "AI Report",
+
+                report,
+
+                height=400
+
+            )
+
+
+        except Exception as e:
+
+
+            st.error(e)
+
 
 
 
 st.divider()
 
 
+
+
+
 # ==========================
-# EARTHQUAKE INTELLIGENCE MAP
+# EARTHQUAKE MAP
 # ==========================
 
-import folium
-from streamlit_folium import st_folium
 
+st.subheader(
 
-st.header(
     "🌍 Earthquake Intelligence Map"
+
 )
 
 
+
 center = [
+
     df.latitude.mean(),
+
     df.longitude.mean()
+
 ]
 
 
-m = folium.Map(
+
+earthquake_map = folium.Map(
+
     location=center,
+
     zoom_start=2
+
 )
 
 
@@ -401,64 +871,234 @@ m = folium.Map(
 for _, row in df.tail(200).iterrows():
 
 
+
     if row["magnitude"] >= 6:
+
 
         color = "red"
 
+
+
     elif row["magnitude"] >= 4:
+
 
         color = "orange"
 
+
+
     else:
+
 
         color = "green"
 
 
 
+
     folium.CircleMarker(
 
+
         location=[
+
             row["latitude"],
+
             row["longitude"]
+
         ],
 
+
         radius=max(
+
             row["magnitude"] / 1.5,
+
             3
+
         ),
 
+
+
         popup=f"""
-        Location: {row['place']}<br>
-        Magnitude: {row['magnitude']}<br>
-        Depth: {row['depth']} km
-        """,
+
+Location: {row['place']}
+
+Magnitude: {row['magnitude']}
+
+Depth: {row['depth']} km
+
+""",
+
 
         color=color,
 
+
         fill=True,
+
 
         fill_color=color
 
-    ).add_to(m)
+
+    ).add_to(earthquake_map)
+
 
 
 
 st_folium(
-    m,
+
+    earthquake_map,
+
     width=1200,
+
     height=600
+
 )
+
+
+
+
+st.divider()
+
+
+
+# ==========================
+# RESEARCH RESULTS
+# ==========================
+
+st.divider()
+
+st.header(
+    "🔬 Research Evaluation"
+)
+
+
+# Baseline
+
+if os.path.exists("evaluation/model_comparison.json"):
+
+    st.subheader(
+        "🏆 Baseline Comparison"
+    )
+
+
+    with open(
+        "evaluation/model_comparison.json"
+    ) as f:
+
+        baseline = json.load(f)
+
+
+    baseline_df = pd.DataFrame(baseline).T
+
+
+    st.dataframe(
+        baseline_df,
+        use_container_width=True
+    )
+
+
+
+# Ablation
+
+if os.path.exists("evaluation/ablation_results.json"):
+
+    st.subheader(
+        "🧪 Ablation Study"
+    )
+
+
+    with open(
+        "evaluation/ablation_results.json"
+    ) as f:
+
+        ablation = json.load(f)
+
+
+    ablation_df = pd.DataFrame(ablation).T
+
+
+    st.dataframe(
+        ablation_df,
+        use_container_width=True
+    )
+
+
+
+# SHAP
+
+if os.path.exists(
+    "evaluation/shap_importance_report.json"
+):
+
+    st.subheader(
+        "🔍 Feature Importance"
+    )
+
+
+    with open(
+        "evaluation/shap_importance_report.json"
+    ) as f:
+
+        shap_data = json.load(f)
+
+
+    shap_df = pd.DataFrame(
+        shap_data
+    )
+
+
+    st.dataframe(
+        shap_df,
+        use_container_width=True
+    )
+
+
+
+# ==========================
+# ADDITIONAL VALIDATION REPORTS
+# ==========================
+
+st.subheader("📈 Confidence Interval Validation")
+
+if os.path.exists("evaluation/confidence_interval.json"):
+    with open("evaluation/confidence_interval.json", "r") as f:
+        ci = json.load(f)
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.metric("Accuracy", f"{ci.get('accuracy',0)*100:.2f}%")
+    with c2:
+        st.metric("Confidence Level", ci.get("confidence_level","95%"))
+    with c3:
+        st.metric(
+            "Interval",
+            f"{ci.get('lower_bound',0)*100:.2f}% - {ci.get('upper_bound',0)*100:.2f}%"
+        )
+
+
+st.subheader("🧠 MLP Regularization Study")
+
+if os.path.exists("evaluation/mlp_tuning_results.json"):
+    with open("evaluation/mlp_tuning_results.json", "r") as f:
+        mlp = json.load(f)
+
+    st.json(mlp)
+
+
 # ==========================
 # EARTHQUAKE TABLE
 # ==========================
 
 
-st.header(
+st.subheader(
+
     "🌎 Latest Earthquakes"
+
 )
 
 
+
 st.dataframe(
+
     df.tail(20),
+
     use_container_width=True
+
 )

@@ -1,15 +1,7 @@
-.env
-
-__pycache__/
-
-*.pyc
-
-venv/
-
-earthquakes.db
-
-prepared_earthquake_data.csv
-
 *.pkl
+*.db
+*.csv
 
-reports/*.txt
+dashboard_backup.py
+dashboard_error_backup.py
+dashboard_fixed_final.py

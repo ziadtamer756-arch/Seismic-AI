@@ -1,0 +1,17 @@
+{
+    "best_parameters": {
+        "alpha": 0.0001,
+        "early_stopping": false,
+        "hidden_layer_sizes": [
+            100,
+            50
+        ]
+    },
+    "cv_accuracy": 0.9089264735920658,
+    "test_accuracy": 0.9123724172267862,
+    "test_f1": 0.9078488049460879,
+    "regularization": {
+        "alpha": 0.0001,
+        "early_stopping": false
+    }
+}

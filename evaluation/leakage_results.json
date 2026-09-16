@@ -1,0 +1,14 @@
+{
+    "Full Features": {
+        "accuracy": 0.9691,
+        "f1": 0.9694
+    },
+    "Without Historical Magnitude": {
+        "accuracy": 0.9744,
+        "f1": 0.9746
+    },
+    "Only Geographic + Time": {
+        "accuracy": 0.9721,
+        "f1": 0.9723
+    }
+}

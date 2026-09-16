@@ -1,0 +1,22 @@
+{
+    "Full Features": {
+        "features_count": 12,
+        "accuracy": 0.9517,
+        "f1_score": 0.9531
+    },
+    "Without Historical Features": {
+        "features_count": 10,
+        "accuracy": 0.9587,
+        "f1_score": 0.9594
+    },
+    "Without Time Features": {
+        "features_count": 7,
+        "accuracy": 0.9432,
+        "f1_score": 0.9452
+    },
+    "Only Geographic Features": {
+        "features_count": 3,
+        "accuracy": 0.937,
+        "f1_score": 0.939
+    }
+}

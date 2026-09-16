@@ -1,0 +1,23 @@
+paths:
+
+  database: "earthquakes.db"
+
+  risk_model: "models/risk_model.pkl"
+
+  magnitude_model: "models/magnitude_model.pkl"
+
+  risk_scaler: "models/risk_scaler.pkl"
+
+  magnitude_scaler: "models/magnitude_scaler.pkl"
+
+
+project:
+
+  name: Seismic AI Research Platform
+
+  version: 1.0
+logging:
+
+  file: logs/seismic.log
+
+  level: INFO

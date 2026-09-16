@@ -36,10 +36,13 @@ model = joblib.load(
 # LOAD TRAINING DATA
 # ==========================
 
-data = pd.read_csv(
-    "risk_training_data.csv"
-)
+import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+data = pd.read_csv(
+    os.path.join(BASE_DIR, "risk_training_data.csv")
+)
 
 X_train = data.drop(
     "risk_level",

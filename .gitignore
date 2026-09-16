@@ -8,3 +8,9 @@ dashboard_fixed_final.py
 __pycache__/
 *.pyc
 .pytest_cache/
+.env
+venv/
+logs/
+__pycache__/
+*.pyc
+dashboard_final.py

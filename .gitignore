@@ -5,3 +5,6 @@
 dashboard_backup.py
 dashboard_error_backup.py
 dashboard_fixed_final.py
+__pycache__/
+*.pyc
+.pytest_cache/

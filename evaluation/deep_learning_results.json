@@ -1,0 +1,21 @@
+{
+    "model": "Deep Neural Network",
+    "framework": "TensorFlow/Keras",
+    "task": "Multiclass Classification",
+    "accuracy": 0.9004232013940752,
+    "f1_score_weighted": 0.8916489413823445,
+    "architecture": [
+        "Dense(128)",
+        "BatchNormalization",
+        "Dropout(0.3)",
+        "Dense(64)",
+        "Dropout(0.25)",
+        "Dense(32)",
+        "Softmax Output"
+    ],
+    "regularization": [
+        "Dropout",
+        "BatchNormalization",
+        "EarlyStopping"
+    ]
+}

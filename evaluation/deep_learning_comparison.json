@@ -1,4 +1,9 @@
 {
+    "DNN": {
+        "accuracy": 0.9004232013940752,
+        "f1_score": 0.8916489413823445,
+        "framework": "TensorFlow/Keras"
+    },
     "TabNet": {
         "accuracy": 0.9044062733383121,
         "f1_score": 0.8936085854005326,

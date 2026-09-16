@@ -14,3 +14,8 @@ logs/
 __pycache__/
 *.pyc
 dashboard_final.py
+dl_env/
+venv/
+__pycache__/
+*.pyc
+.env

@@ -1,0 +1,12 @@
+{
+    "model": "Seismic Ensemble AI",
+    "components": [
+        "Random Forest",
+        "DNN",
+        "TabNet",
+        "Wide Deep"
+    ],
+    "accuracy": 0.9233258650734378,
+    "f1_score_weighted": 0.9157817367513021,
+    "strategy": "Soft Voting"
+}

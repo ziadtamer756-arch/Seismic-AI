@@ -9,15 +9,14 @@ import folium
 from streamlit_folium import st_folium
 
 
-import sys
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-
 from ai_prediction import predict_latest_earthquake
 from ai_report import generate_ai_report
 
 from earthquake_data import get_recent_earthquakes
 from database import save_earthquakes
+
+from app.modules.live_prediction import predict_live_ensemble
+from app.modules.live_earthquakes import fetch_latest_earthquakes
 
 tabs = st.tabs(
 [
@@ -53,7 +52,7 @@ st.set_page_config(
 # ==========================
 
 with open(
-    os.path.join(BASE_DIR, "config/config.yaml"),
+    "config/config.yaml",
     "r"
 ) as file:
 
@@ -481,14 +480,14 @@ st.subheader(
 
 if os.path.exists(
 
-    os.path.join(BASE_DIR, "evaluation/model_metrics.json")
+    "model_metrics.json"
 
 ):
 
 
     with open(
 
-        os.path.join(BASE_DIR, "evaluation/model_metrics.json"),
+        "model_metrics.json",
 
         "r"
 
@@ -550,9 +549,11 @@ if os.path.exists(
 
 
 st.divider()
+
 # ==========================
-# STATISTICAL VALIDATION
+# VALIDATION
 # ==========================
+
 
 st.subheader(
     "🔁 Statistical Validation"
@@ -560,163 +561,59 @@ st.subheader(
 
 
 if os.path.exists(
-    os.path.join(BASE_DIR, "evaluation/confidence_interval.json")
+    "validation_results.json"
 ):
 
+
     with open(
-        os.path.join(BASE_DIR, "evaluation/confidence_interval.json"),
-        "r"
+        "validation_results.json"
     ) as f:
 
-        validation = json.load(f)
+
+        validation=json.load(f)
+
 
 
     a,b,c = st.columns(3)
 
 
+
     with a:
 
         st.metric(
-            "Accuracy",
-            f"{validation['accuracy']*100:.2f}%"
+
+            "Mean Accuracy",
+
+            f"{validation['mean_accuracy']*100:.2f}%"
+
         )
+
 
 
     with b:
 
         st.metric(
-            "Confidence Level",
-            validation["confidence_level"]
+
+            "Std",
+
+            validation["standard_deviation"]
+
         )
+
 
 
     with c:
 
+        interval = validation["95_confidence_interval"]
+
+
         st.metric(
-            "95% Confidence Interval",
-            f"{validation['lower_bound']*100:.2f}% - {validation['upper_bound']*100:.2f}%"
+
+            "95% CI",
+
+            f"{interval['lower']*100:.2f}% - {interval['upper']*100:.2f}%"
+
         )
-
-
-else:
-
-    st.info(
-        "Confidence interval results not available"
-    )
-# ==========================================
-# Deep Learning Benchmark
-# ==========================================
-
-import os
-import json
-import pandas as pd
-import streamlit as st
-
-
-st.markdown("---")
-
-st.header("🧠 Deep Learning Benchmark")
-
-
-BASE_DIR = os.path.dirname(
-    os.path.abspath(__file__)
-)
-
-comparison_path = os.path.join(
-    BASE_DIR,
-    "evaluation",
-    "deep_learning_comparison.json"
-)
-
-
-if os.path.exists(comparison_path):
-
-    with open(comparison_path, "r") as f:
-        deep_results = json.load(f)
-
-
-    rows = []
-
-
-    for model, data in deep_results.items():
-
-        rows.append({
-
-            "Model": model,
-
-            "Framework": data.get(
-                "framework",
-                "-"
-            ),
-
-            "Accuracy": round(
-                data.get(
-                    "accuracy",
-                    0
-                ) * 100,
-                2
-            ),
-
-            "F1 Score": round(
-                data.get(
-                    "f1_score",
-                    0
-                ) * 100,
-                2
-            )
-
-        })
-
-
-    df_deep = pd.DataFrame(rows)
-
-
-    st.subheader(
-        "📊 Model Performance Comparison"
-    )
-
-
-    st.dataframe(
-        df_deep,
-        use_container_width=True
-    )
-
-
-    col1, col2 = st.columns(2)
-
-
-    with col1:
-
-        st.subheader(
-            "Accuracy"
-        )
-
-        st.bar_chart(
-            df_deep.set_index(
-                "Model"
-            )["Accuracy"]
-        )
-
-
-    with col2:
-
-        st.subheader(
-            "F1 Score"
-        )
-
-        st.bar_chart(
-            df_deep.set_index(
-                "Model"
-            )["F1 Score"]
-        )
-
-
-else:
-
-    st.warning(
-        "Deep Learning results not found"
-    )
-
 # ==========================
 # ABLATION STUDY
 # ==========================
@@ -730,14 +627,14 @@ st.subheader(
 
 if os.path.exists(
 
-    os.path.join(BASE_DIR, "evaluation/ablation_results.json")
+    "ablation_results.json"
 
 ):
 
 
     with open(
 
-        os.path.join(BASE_DIR, "evaluation/ablation_results.json")
+        "ablation_results.json"
 
     ) as f:
 
@@ -777,9 +674,9 @@ st.subheader(
     "⚙️ Hyperparameter Optimization"
 )
 
-if os.path.exists(os.path.join(BASE_DIR, "evaluation/hyperparameter_results.json")):
+if os.path.exists("hyperparameter_results.json"):
 
-    with open(os.path.join(BASE_DIR, "evaluation/hyperparameter_results.json"), "r") as f:
+    with open("hyperparameter_results.json", "r") as f:
         hp = json.load(f)
 
     c1, c2, c3 = st.columns(3)
@@ -867,14 +764,14 @@ st.subheader(
 
 if os.path.exists(
 
-    os.path.join(BASE_DIR, "evaluation/confusion_matrix.png")
+    "confusion_matrix.png"
 
 ):
 
 
     st.image(
 
-        os.path.join(BASE_DIR, "evaluation/confusion_matrix.png"),
+        "confusion_matrix.png",
 
         caption="Risk Model Confusion Matrix"
 
@@ -1075,6 +972,78 @@ st.divider()
 
 
 
+
+# ==========================
+# LIVE DEEP LEARNING ENSEMBLE
+# ==========================
+
+st.divider()
+
+st.subheader("🤖 Live Deep Learning Ensemble Prediction")
+
+if st.button("Run Live Ensemble AI Prediction"):
+
+    try:
+
+        result = predict_live_ensemble()
+
+        c1, c2, c3 = st.columns(3)
+
+        with c1:
+            st.metric(
+                "Risk",
+                result["risk"]
+            )
+
+        with c2:
+            st.metric(
+                "Confidence",
+                f'{result["confidence"]}%'
+            )
+
+        with c3:
+            st.metric(
+                "Magnitude",
+                result["magnitude"]
+            )
+
+        st.info(
+            f"""
+Location:
+{result["location"]}
+
+Depth:
+{result["depth"]} km
+
+Model:
+{result["model"]}
+
+Models Used:
+{", ".join(result["models_used"])}
+"""
+        )
+
+    except Exception as e:
+        st.error(f"Ensemble Prediction Error: {e}")
+
+
+# Live earthquake feed
+
+st.subheader("🌍 Live Earthquake Feed")
+
+if st.button("Fetch Latest Live Earthquakes"):
+
+    try:
+        live_events = fetch_latest_earthquakes(limit=10)
+        st.dataframe(
+            live_events,
+            use_container_width=True
+        )
+
+    except Exception as e:
+        st.error(f"Live API Error: {e}")
+
+
 # ==========================
 # RESEARCH RESULTS
 # ==========================
@@ -1088,7 +1057,7 @@ st.header(
 
 # Baseline
 
-if os.path.exists(os.path.join(BASE_DIR, "evaluation/model_comparison.json")):
+if os.path.exists("model_comparison.json"):
 
     st.subheader(
         "🏆 Baseline Comparison"
@@ -1096,7 +1065,7 @@ if os.path.exists(os.path.join(BASE_DIR, "evaluation/model_comparison.json")):
 
 
     with open(
-        os.path.join(BASE_DIR, "evaluation/model_comparison.json")
+        "model_comparison.json"
     ) as f:
 
         baseline = json.load(f)
@@ -1114,7 +1083,7 @@ if os.path.exists(os.path.join(BASE_DIR, "evaluation/model_comparison.json")):
 
 # Ablation
 
-if os.path.exists(os.path.join(BASE_DIR, "evaluation/ablation_results.json")):
+if os.path.exists("ablation_results.json"):
 
     st.subheader(
         "🧪 Ablation Study"
@@ -1122,7 +1091,7 @@ if os.path.exists(os.path.join(BASE_DIR, "evaluation/ablation_results.json")):
 
 
     with open(
-        os.path.join(BASE_DIR, "evaluation/ablation_results.json")
+        "ablation_results.json"
     ) as f:
 
         ablation = json.load(f)
@@ -1141,7 +1110,7 @@ if os.path.exists(os.path.join(BASE_DIR, "evaluation/ablation_results.json")):
 # SHAP
 
 if os.path.exists(
-    os.path.join(BASE_DIR, "evaluation/shap_importance_report.json")
+    "shap_importance_report.json"
 ):
 
     st.subheader(
@@ -1150,7 +1119,7 @@ if os.path.exists(
 
 
     with open(
-        os.path.join(BASE_DIR, "evaluation/shap_importance_report.json")
+        "shap_importance_report.json"
     ) as f:
 
         shap_data = json.load(f)
@@ -1165,39 +1134,6 @@ if os.path.exists(
         shap_df,
         use_container_width=True
     )
-
-
-
-# ==========================
-# ADDITIONAL VALIDATION REPORTS
-# ==========================
-
-st.subheader("📈 Confidence Interval Validation")
-
-if os.path.exists(os.path.join(BASE_DIR, "evaluation/confidence_interval.json")):
-    with open(os.path.join(BASE_DIR, "evaluation/confidence_interval.json"), "r") as f:
-        ci = json.load(f)
-
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.metric("Accuracy", f"{ci.get('accuracy',0)*100:.2f}%")
-    with c2:
-        st.metric("Confidence Level", ci.get("confidence_level","95%"))
-    with c3:
-        st.metric(
-            "Interval",
-            f"{ci.get('lower_bound',0)*100:.2f}% - {ci.get('upper_bound',0)*100:.2f}%"
-        )
-
-
-st.subheader("🧠 MLP Regularization Study")
-
-if os.path.exists(os.path.join(BASE_DIR, "evaluation/mlp_tuning_results.json")):
-    with open(os.path.join(BASE_DIR, "evaluation/mlp_tuning_results.json"), "r") as f:
-        mlp = json.load(f)
-
-    st.json(mlp)
-
 
 # ==========================
 # EARTHQUAKE TABLE

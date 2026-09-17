@@ -5,11 +5,12 @@ import pandas as pd
 import joblib
 
 from tensorflow.keras.models import load_model
+from pytorch_tabnet.tab_model import TabNetClassifier
 
 
-# ==============================
-# Paths
-# ==============================
+# ======================================
+# Project Paths
+# ======================================
 
 CURRENT_DIR = os.path.dirname(
     os.path.abspath(__file__)
@@ -24,7 +25,12 @@ PROJECT_DIR = os.path.dirname(
 sys.path.append(PROJECT_DIR)
 
 
-from live_earthquakes import fetch_latest_earthquakes
+# Import
+try:
+    from app.modules.live_earthquakes import fetch_latest_earthquakes
+except ModuleNotFoundError:
+    from live_earthquakes import fetch_latest_earthquakes
+
 
 
 MODEL_DIR = os.path.join(
@@ -33,9 +39,10 @@ MODEL_DIR = os.path.join(
 )
 
 
-# ==============================
+
+# ======================================
 # Feature Engineering
-# ==============================
+# ======================================
 
 def prepare_features(row):
 
@@ -50,7 +57,6 @@ def prepare_features(row):
     month = timestamp.month
 
 
-    # depth category
     if depth < 70:
         depth_category = 0
 
@@ -61,8 +67,6 @@ def prepare_features(row):
         depth_category = 2
 
 
-
-    # season encoding
 
     if month in [12, 1, 2]:
         season = 1
@@ -78,40 +82,31 @@ def prepare_features(row):
 
 
 
-    data = pd.DataFrame([{
+    features = pd.DataFrame([{
 
         "depth": depth,
 
-        "latitude":
-            row["latitude"],
+        "latitude": row["latitude"],
 
-        "longitude":
-            row["longitude"],
+        "longitude": row["longitude"],
 
-        "hour":
-            timestamp.hour,
+        "hour": timestamp.hour,
 
-        "month":
-            month,
+        "month": month,
 
-        "day":
-            timestamp.day,
+        "day": timestamp.day,
 
-        "day_of_year":
-            timestamp.dayofyear,
+        "day_of_year": timestamp.dayofyear,
 
-        "season":
-            season,
+        "season": season,
 
-        "depth_category":
-            depth_category,
+        "depth_category": depth_category,
 
         "lat_lon_product":
             row["latitude"] *
             row["longitude"],
 
-        "events_previous":
-            0,
+        "events_previous": 0,
 
         "avg_previous_magnitude":
             row["magnitude"]
@@ -119,11 +114,8 @@ def prepare_features(row):
     }])
 
 
-
-    # one hot encoding
-
-    data = pd.get_dummies(
-        data,
+    features = pd.get_dummies(
+        features,
         columns=[
             "season",
             "depth_category"
@@ -131,18 +123,39 @@ def prepare_features(row):
     )
 
 
-    return data
+    return features
 
 
 
-# ==============================
-# Live Prediction
-# ==============================
+# ======================================
+# Align Features
+# ======================================
 
-def predict_live_risk():
+def align_features(X, scaler):
+
+    expected = scaler.feature_names_in_
+
+
+    for col in expected:
+
+        if col not in X.columns:
+
+            X[col] = 0
+
+
+    return X[expected]
+
+
+
+# ======================================
+# Ensemble Prediction
+# ======================================
+
+def predict_live_ensemble():
+
 
     print(
-        "Fetching latest earthquake..."
+        "Fetching live earthquake..."
     )
 
 
@@ -154,48 +167,26 @@ def predict_live_risk():
     earthquake = live.iloc[0]
 
 
-    print(
-        "Earthquake:",
-        earthquake["place"]
-    )
-
-
 
     X = prepare_features(
         earthquake
     )
 
 
-    # Load scaler
 
     scaler = joblib.load(
-
         os.path.join(
             MODEL_DIR,
             "deep_scaler.pkl"
         )
-
     )
 
 
-    # Match training features
 
-    expected_features = (
-        scaler.feature_names_in_
+    X = align_features(
+        X,
+        scaler
     )
-
-
-    for col in expected_features:
-
-        if col not in X.columns:
-
-            X[col] = 0
-
-
-
-    X = X[
-        expected_features
-    ]
 
 
 
@@ -205,31 +196,101 @@ def predict_live_risk():
 
 
 
-    # Load DNN
+    predictions = []
 
-    model = load_model(
 
+
+    # ==========================
+    # DNN
+    # ==========================
+
+    dnn = load_model(
         os.path.join(
             MODEL_DIR,
             "deep_seismic_model.keras"
         )
-
     )
 
 
-    probability = model.predict(
+    dnn_prob = dnn.predict(
+        X_scaled,
+        verbose=0
+    )[0]
+
+
+    predictions.append(
+        dnn_prob
+    )
+
+
+
+    # ==========================
+    # Wide Deep
+    # ==========================
+
+    wide = load_model(
+        os.path.join(
+            MODEL_DIR,
+            "wide_deep_seismic_model.keras"
+        )
+    )
+
+
+    wide_prob = wide.predict(
+        X_scaled,
+        verbose=0
+    )[0]
+
+
+    predictions.append(
+        wide_prob
+    )
+
+
+
+    # ==========================
+    # TabNet
+    # ==========================
+
+    tabnet = TabNetClassifier()
+
+
+    tabnet.load_model(
+        os.path.join(
+            MODEL_DIR,
+            "tabnet_seismic_model.zip"
+        )
+    )
+
+
+    tabnet_prob = tabnet.predict_proba(
         X_scaled
     )[0]
 
 
+    predictions.append(
+        tabnet_prob
+    )
 
-    prediction = np.argmax(
-        probability
+
+
+    # ==========================
+    # Soft Voting
+    # ==========================
+
+    final_probability = np.mean(
+        predictions,
+        axis=0
+    )
+
+
+    final_prediction = np.argmax(
+        final_probability
     )
 
 
     confidence = float(
-        max(probability)
+        max(final_probability)
     )
 
 
@@ -251,28 +312,36 @@ def predict_live_risk():
         "location":
             earthquake["place"],
 
-
         "magnitude":
             float(
                 earthquake["magnitude"]
             ),
-
 
         "depth":
             float(
                 earthquake["depth"]
             ),
 
+        "model":
+            "Deep Learning Ensemble",
 
         "risk":
-            risk_levels[prediction],
-
+            risk_levels[
+                final_prediction
+            ],
 
         "confidence":
             round(
                 confidence * 100,
                 2
-            )
+            ),
+
+        "models_used":
+            [
+                "DNN",
+                "Wide Deep",
+                "TabNet"
+            ]
 
     }
 
@@ -281,18 +350,18 @@ def predict_live_risk():
 
 
 
-# ==============================
+# ======================================
 # Test
-# ==============================
+# ======================================
 
 if __name__ == "__main__":
 
 
-    result = predict_live_risk()
+    result = predict_live_ensemble()
 
 
     print(
-        "\n========== Live Prediction =========="
+        "\n========== Ensemble Live Prediction =========="
     )
 
 

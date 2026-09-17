@@ -1,458 +1,252 @@
-\# 🌍 Seismic AI Research Platform
+# 🌍 Seismic-AI
+## Real-Time Earthquake Risk Prediction System Using Machine Learning & Deep Learning
 
+---
 
+## 📌 Project Overview
 
-An intelligent earthquake analysis and prediction framework combining machine learning, explainable AI, statistical validation, and interactive visualization.
+Seismic-AI is an intelligent earthquake risk prediction platform that combines traditional Machine Learning, Deep Learning, Ensemble Learning, Real-Time Earthquake Data, and Explainable AI.
 
+The system predicts earthquake risk levels using historical seismic data and provides real-time predictions through a Streamlit dashboard.
 
+---
 
-\---
+# 🚀 Main Features
 
+## 🌐 Real-Time Earthquake Monitoring
 
+- Integration with USGS Earthquake API
+- Fetch latest earthquake events
+- Display:
+  - Location
+  - Magnitude
+  - Depth
+  - Coordinates
 
-\# 📌 Project Overview
 
+---
 
+# 🤖 Machine Learning Models
 
-The Seismic AI Research Platform is designed to analyze earthquake data and estimate seismic risk using machine learning approaches.
+Implemented models:
 
+- Random Forest
+- Tuned ML Models
 
 
-The system provides:
+---
 
+# 🧠 Deep Learning Architectures
 
+The project includes:
 
-\- Earthquake data processing
+## 1. Deep Neural Network (DNN)
 
-\- Risk classification
+Framework:
+TensorFlow / Keras
 
-\- Magnitude prediction
+Architecture:
 
-\- Explainable AI analysis
+- Dense Layers
+- Batch Normalization
+- Dropout
+- Softmax Output
 
-\- Statistical evaluation
 
-\- Interactive research dashboard
+## 2. Wide & Deep Network
 
+Framework:
+TensorFlow / Keras
 
+Architecture:
 
+- Wide Branch
+- Deep Dense Layers
+- BatchNormalization
+- Dropout
 
 
-\---
+## 3. TabNet
 
+Framework:
+PyTorch TabNet
 
+Architecture:
 
-\# 🏗️ System Architecture
+- Attention-based Feature Selection
+- Sparse Feature Learning
 
 
+---
 
-The workflow consists of:
+# 🔥 Ensemble AI
 
+The final prediction system combines:
 
 
-1\. Data Collection
+Random Forest
++
+DNN
++
+Wide & Deep
++
+TabNet
 
-2\. Data Preprocessing
 
-3\. Feature Engineering
+Using:
 
-4\. Model Training
 
-5\. Model Evaluation
+Soft Voting Ensemble
 
-6\. Explainability Analysis
 
-7\. Visualization Dashboard
+Output:
 
+- Risk Level
+- Confidence Score
+- Model Agreement
 
 
+---
 
+# 📊 Model Performance
 
-\---
+| Model | Accuracy |
+|------|----------|
+| DNN | ~90% |
+| Wide & Deep | 90.41% |
+| TabNet | 90.44% |
+| Ensemble AI | 92.33% |
 
 
+---
 
-\# 📊 Dataset and Features
+# 🔍 Explainable AI
 
+Implemented using:
 
+## SHAP
 
-The framework uses prepared earthquake datasets containing seismic and geographic information.
+Provides:
 
+- Feature Importance
+- Model Explanation
+- Understanding of prediction factors
 
 
-The preprocessing pipeline includes:
+---
 
+# 🖥 Dashboard
 
+Built using:
 
-\- Data cleaning
+## Streamlit
 
-\- Feature transformation
+Features:
 
-\- Scaling
+✅ Interactive Maps  
+✅ Earthquake Analytics  
+✅ Model Comparison  
+✅ SHAP Visualization  
+✅ Live Earthquake Feed  
+✅ Real-Time Ensemble Prediction  
 
-\- Dataset preparation
 
+---
 
+# 📂 Project Structure
 
 
+Seismic-AI/
 
-Feature categories include:
-
-
-
-\- Geographic features
-
-\- Temporal features
-
-\- Depth information
-
-\- Historical seismic indicators
-
-
-
-
-
-\---
-
-
-
-\# 🤖 Machine Learning Models
-
-
-
-The project evaluates multiple approaches:
-
-
-
-\## Classification Models
-
-
-
-\- Logistic Regression
-
-\- Random Forest
-
-\- XGBoost
-
-\- Multi-Layer Perceptron (MLPClassifier)
-
-
-
-
-
-\## Regression Model
-
-
-
-\- Magnitude prediction model
-
-
-
-
-
-\---
-
-
-
-\# 🧪 Evaluation Framework
-
-
-
-The project includes a comprehensive evaluation pipeline:
-
-
-
-\## Model Comparison
-
-
-
-Comparison between different machine learning approaches using:
-
-
-
-\- Accuracy
-
-\- Precision
-
-\- Recall
-
-\- F1-score
-
-
-
-
-
-\## Cross Validation
-
-
-
-Cross-validation experiments are performed to evaluate model stability.
-
-
-
-
-
-\## Hyperparameter Optimization
-
-
-
-Model parameters are optimized and stored in:
-
-
-
-
-
-evaluation/hyperparameter\_results.json
-
-
-
-
-
-
-
-\## Ablation Study
-
-
-
-Feature contribution is analyzed through controlled experiments:
-
-
-
-\- Full Features
-
-\- Without Historical Features
-
-\- Without Time Features
-
-\- Geographic Features Only
-
-
-
-
-
-\## Statistical Validation
-
-
-
-Confidence intervals are calculated to estimate evaluation uncertainty.
-
-
-
-
-
-\---
-
-
-
-\# 🔍 Explainable AI
-
-
-
-The system integrates explainability methods:
-
-
-
-\- SHAP feature importance
-
-\- Feature contribution analysis
-
-\- Prediction explanation
-
-
-
-
-
-Results:
-
-
-
-
-
-evaluation/shap\_importance\_report.json
-
-
-
-
-
-
-
-\---
-
-
-
-\# 🧠 Neural Network Experiments
-
-
-
-MLP experiments include:
-
-
-
-\- Architecture evaluation
-
-\- Regularization tuning
-
-\- Alpha parameter testing
-
-\- Early stopping analysis
-
-
-
-
-
-Results:
-
-
-
-
-
-evaluation/mlp\_tuning\_results.json
-
-
-
-
-
-
-
-\---
-
-
-
-\# 🖥️ Research Dashboard
-
-
-
-The Streamlit dashboard provides:
-
-
-
-\- Earthquake statistics
-
-\- AI predictions
-
-\- Model performance
-
-\- Validation results
-
-\- Ablation analysis
-
-\- Hyperparameter results
-
-\- Explainability visualization
-
-\- Global earthquake map
-
-
-
-
-
-Run:
-
-
-
-```bash
-
-python -m streamlit run dashboard.py
-
-📁 Project Structure
-
-Seismic-Agent/
-
-
-
-├── dashboard.py
+├── app/
+│ └── modules/
+│ ├── live_earthquakes.py
+│ └── live_prediction.py
 
 ├── models/
+│ ├── deep_seismic_model.keras
+│ ├── wide_deep_seismic_model.keras
+│ └── tabnet_seismic_model.zip
+
+├── training/
+│ ├── train_deep_learning.py
+│ ├── train_tabnet.py
+│ ├── train_wide_deep.py
+│ └── train_ensemble.py
 
 ├── evaluation/
 
-├── training/
-
-├── tests/
-
-├── docs/
-
-├── data/
-
 ├── reports/
+
+├── dashboard.py
 
 └── requirements.txt
 
-✅ Testing
 
 
+---
 
-Automated tests:
+# ⚙️ Installation
 
+Create environment:
 
+```bash
+python -m venv dl_env
 
-5 passed
+Activate:
 
+Windows:
 
+dl_env\Scripts\activate
 
-Tests cover:
+Install dependencies:
 
+pip install -r requirements.txt
+▶️ Run Dashboard
+python -m streamlit run dashboard.py
+🧪 Live Prediction Example
 
+Example output:
 
-Database availability
+========== Ensemble Live Prediction ==========
 
-Dataset loading
+Location:
+California
 
-Feature generation
+Model:
+Deep Learning Ensemble
 
-Prediction structure
+Risk:
+Low
 
-Prediction values
+Confidence:
+97%
 
+Models Used:
+DNN
+Wide Deep
+TabNet
+👨‍💻 Technologies
+Python
+TensorFlow
+Keras
+PyTorch
+PyTorch TabNet
+Scikit-Learn
+Streamlit
+SHAP
+Pandas
+NumPy
+📌 Future Improvements
+GPU acceleration
+Larger seismic datasets
+Time-series earthquake forecasting
+Mobile application
+Cloud deployment
+Project Status
 
-
-Run tests:
-
-
-
-python -m pytest tests -v
-
-📚 Documentation
-
-
-
-Detailed documentation:
-
-
-
-docs/
-
-├── methodology.md
-
-├── experiments.md
-
-└── research\_contributions.md
-
-🎯 Research Contributions
-
-
-
-The project provides:
-
-
-
-Integrated seismic ML pipeline
-
-Multi-model evaluation
-
-Explainable predictions
-
-Statistical validation
-
-Interactive research visualization
-
-⚠️ Notes
-
-
-
-This project is a research prototype for earthquake data analysis and machine learning experimentation.
-
-
-
-
-
+✅ Machine Learning Completed
+✅ Deep Learning Completed
+✅ Ensemble AI Completed
+✅ Real-Time Prediction Completed
+✅ Dashboard Completed

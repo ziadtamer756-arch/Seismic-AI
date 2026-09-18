@@ -1,0 +1,56 @@
+{
+    "baseline": {
+        "toolbox": "SeisBench",
+        "dataset": "STEAD",
+        "task": [
+            "Earthquake Detection",
+            "P Phase Picking",
+            "S Phase Picking"
+        ],
+        "models": [
+            "PhaseNet",
+            "EQTransformer",
+            "GPD"
+        ],
+        "evaluation_metrics": [
+            "Detection performance",
+            "P arrival residual error",
+            "S arrival residual error"
+        ],
+        "source": [
+            "Munchmeyer et al. 2022 - Quantitative Evaluation of Deep Learning Based Seismic Pickers",
+            "SeisBench pretrained model benchmarks"
+        ]
+    },
+
+    "published_results": {
+
+        "PhaseNet": {
+            "task": "Phase Picking",
+            "metrics": {
+                "P_phase": "Pick arrival residual error evaluated against manual picks",
+                "S_phase": "Pick arrival residual error evaluated against manual picks"
+            }
+        },
+
+        "EQTransformer": {
+            "task": [
+                "Earthquake Detection",
+                "Phase Picking"
+            ],
+            "metrics": {
+                "Detection": "Detection performance based on event identification",
+                "P_phase": "Arrival time residual error",
+                "S_phase": "Arrival time residual error"
+            }
+        },
+
+        "GPD": {
+            "task": "Phase Picking",
+            "metrics": {
+                "P_phase": "Arrival time residual error",
+                "S_phase": "Arrival time residual error"
+            }
+        }
+    }
+}

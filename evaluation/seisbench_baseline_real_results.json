@@ -1,0 +1,31 @@
+{
+  "baseline": {
+    "toolbox": "SeisBench",
+    "dataset": "STEAD",
+    "task": [
+      "Earthquake Detection",
+      "Phase Picking",
+      "Phase Identification"
+    ],
+    "source": "Munchmeyer et al. 2022 - Which Picker Fits My Data?"
+  },
+
+  "results": {
+    "PhaseNet": {
+      "phase_identification_MCC": 1.00
+    },
+
+    "EQTransformer": {
+      "phase_identification_MCC": 1.00
+    },
+
+    "GPD": {
+      "phase_identification_MCC": 0.99
+    }
+  },
+
+  "evaluation_metric": {
+    "name": "Matthews Correlation Coefficient",
+    "dataset": "STEAD"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "dataset": "STEAD",
+  "toolbox": "SeisBench",
+  "task": [
+    "Earthquake Detection",
+    "P Phase Picking",
+    "S Phase Picking"
+  ],
+  "models": {
+    "PhaseNet": {
+      "type": "Pretrained",
+      "task": "Phase Picking"
+    },
+    "EQTransformer": {
+      "type": "Pretrained",
+      "task": "Detection and Phase Picking"
+    },
+    "GPD": {
+      "type": "Pretrained",
+      "task": "Phase Picking"
+    }
+  },
+  "comparison": {
+    "baseline": "SeisBench pretrained models",
+    "proposed": "DNN + Wide Deep + TabNet Ensemble"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "project": "Seismic-AI",
+
+  "proposed_model_results": {
+    "model": "Seismic Ensemble AI",
+    "components": [
+      "DNN",
+      "Wide Deep",
+      "TabNet"
+    ],
+    "strategy": "Soft Voting",
+    "accuracy": 0.9233,
+    "weighted_f1_score": 0.9158
+  },
+
+  "baseline_models": {
+    "toolbox": "SeisBench",
+    "dataset": "STEAD",
+    "models": [
+      "PhaseNet",
+      "EQTransformer",
+      "GPD"
+    ],
+    "tasks": [
+      "Earthquake Detection",
+      "P-wave Picking",
+      "S-wave Picking"
+    ],
+    "status": "Pretrained baseline setup completed"
+  }
+}

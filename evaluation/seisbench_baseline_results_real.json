@@ -1,0 +1,39 @@
+{
+  "baseline": {
+    "toolbox": "SeisBench",
+    "dataset": "STEAD",
+    "task": [
+      "Earthquake Detection",
+      "P Phase Picking",
+      "S Phase Picking"
+    ],
+    "source": "Munchmeyer et al. 2022 - Which Picker Fits My Data?"
+  },
+
+  "phase_identification_results": {
+    "metric": "Matthews Correlation Coefficient (MCC)",
+
+    "STEAD": {
+      "EQTransformer": 1.00,
+      "PhaseNet": 1.00,
+      "GPD": 0.99
+    }
+  },
+
+  "models": {
+    "PhaseNet": {
+      "type": "Pretrained SeisBench Model",
+      "task": "P/S Phase Picking"
+    },
+
+    "EQTransformer": {
+      "type": "Pretrained SeisBench Model",
+      "task": "Earthquake Detection and Phase Picking"
+    },
+
+    "GPD": {
+      "type": "Pretrained SeisBench Model",
+      "task": "Phase Picking"
+    }
+  }
+}

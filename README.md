@@ -162,6 +162,29 @@ The project evaluates multiple approaches:
 
 
 
+## SeisBench Baseline
+
+The baseline stage uses pretrained seismic waveform models from SeisBench.
+
+Dataset:
+STEAD
+
+Models:
+- PhaseNet
+- EQTransformer
+- GPD
+
+Tasks:
+- Earthquake Detection
+- P-wave picking
+- S-wave picking
+
+Evaluation:
+- Detection performance
+- P arrival residual error
+- S arrival residual error
+
+The baseline is based on published benchmarking studies.
 
 
 \---
